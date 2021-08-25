@@ -1,8 +1,10 @@
 package br.com.zupacademy.nicolecatarina.client.itau
 
+import br.com.zupacademy.nicolecatarina.pixkey.AccountType
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class AccountResponse(
+
         @JsonProperty("tipo")
         val accountType: AccountType,
         @JsonProperty("instituicao")

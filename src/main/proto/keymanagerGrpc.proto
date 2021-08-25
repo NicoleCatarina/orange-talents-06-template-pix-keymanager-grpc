@@ -7,14 +7,113 @@ option objc_class_prefix = "HLW";
 
 package br.com.zupacademy.nicolecatarina;
 
-service KeymanagerGrpcService {
-  rpc send (KeymanagerGrpcRequest) returns (KeymanagerGrpcReply) {}
+import "google/protobuf/timestamp.proto";
+
+service KeymanagerRegistryService {
+  rpc registry (RegistryRequest) returns (RegistryResponse) {}
 }
 
-message KeymanagerGrpcRequest {
-  string name = 1;
+service KeymanagerRemoveService {
+  rpc remove (RemoveRequest) returns (RemoveResponse) {}
 }
 
-message KeymanagerGrpcReply {
-  string message = 1;
+service KeymanagerFindService {
+  rpc find (FindRequest) returns (FindResponse) {}
+}
+
+service KeymanagerListService {
+  rpc list (ListRequest) returns (ListResponse) {}
+}
+
+//list
+message ListRequest {
+  string idCustomer = 1;
+}
+
+message ListResponse {
+  string idCustomer = 1;
+  repeated PixKey pixKeys = 2;
+}
+
+message PixKey {
+  int64 idPix = 1;
+  KeyType keyType = 2;
+  string keyValue = 3;
+  AccountType accountType = 4;
+  google.protobuf.Timestamp createdAt = 5;
+}
+
+//find
+message FindRequest {
+  int64 idPix = 1;
+  string idCustomer = 2;
+}
+
+message FindResponse {
+  int64 idPix = 1;
+  KeyType keyType = 2;
+  string keyValue = 3;
+  Customer customer = 4;
+  CustomerAccount customerAccount = 5;
+  google.protobuf.Timestamp createdAt = 6;
+}
+
+message Customer {
+  string idCustomer = 1;
+  string name = 2;
+  string cpf = 3;
+}
+
+message CustomerAccount {
+  string institutionName = 1;
+  string agency = 2;
+  string account = 3;
+  AccountType accountType = 4;
+}
+
+//remove
+message RemoveRequest {
+  int64 idPix = 1;
+  string idCustomer = 2;
+}
+
+message RemoveResponse {
+  int64 idPix = 1;
+  string idCustomer = 2;
+}
+
+//registry
+enum KeyType {
+  INVALID_KEY_TYPE = 0;
+  CPF = 1;
+  PHONE = 2;
+  EMAIL = 3;
+  RANDOM = 4;
+}
+
+enum AccountType {
+  INVALID_ACCOUNT = 0;
+  CONTA_CORRENTE = 1;
+  CONTA_POUPANCA = 2;
+}
+
+message RegistryRequest {
+  string idCustomer = 1;
+  KeyType keyType = 2;
+  string keyValue = 3;
+  AccountType accountType = 4;
+}
+
+message RegistryResponse {
+  string idPix = 1;
+}
+
+//errors
+message ErrorBody {
+  repeated ErrorDetails errors = 1;
+}
+
+message ErrorDetails {
+  string field = 1;
+  string message = 2;
 }
